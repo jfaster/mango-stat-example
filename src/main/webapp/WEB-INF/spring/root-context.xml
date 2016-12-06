@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/mvc
+                           http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 配置数据源工厂 -->
+    <bean id="dsf" class="org.jfaster.mango.datasource.SimpleDataSourceFactory">
+        <property name="dataSource">
+            <bean class="org.jfaster.mango.datasource.DriverManagerDataSource">
+                <property name="driverClassName" value="org.hsqldb.jdbcDriver" />
+                <property name="url" value="jdbc:hsqldb:mem:test" />
+                <property name="username" value="sa" />
+                <property name="password" value="" />
+            </bean>
+        </property>
+    </bean>
+
+    <!-- 配置mango对象 -->
+    <bean id="mango" class="org.jfaster.mango.operator.Mango" factory-method="newInstance">
+        <property name="dataSourceFactory" ref="dsf" />
+        <!-- 统计监控器
+        <property name="statMonitor">
+            <bean class="org.jfaster.mango.stat.SimpleStatMonitor">
+                <property name="periodSecond" value="5" />
+            </bean>
+        </property>
+        -->
+    </bean>
+
+    <!-- dao扫瞄 -->
+    <bean class="org.jfaster.mango.plugin.spring.MangoDaoScanner">
+        <property name="packages">
+            <list>
+                <value>org.jfaster.mango.example.stat.dao</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="org.jfaster.mango.example.stat.DaemonService" />
+
+</beans>
