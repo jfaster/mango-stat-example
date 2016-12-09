@@ -1,5 +1,6 @@
 package org.jfaster.mango.example.stat;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.jfaster.mango.datasource.SimpleDataSourceFactory;
 import org.jfaster.mango.example.stat.dao.UserDao;
 import org.jfaster.mango.example.stat.pojo.User;
@@ -40,13 +41,20 @@ public class DaemonService implements BeanFactoryPostProcessor {
       public void run() {
         try {
           User user = createRandomUser();
-          int id = userDao.addUser(user);
+          int id = 0;
+          if (RandomUtils.nextBoolean()) { // 1/2概率执行
+            id = userDao.addUser(user);
+          }
           userDao.getUserById(id);
           userDao.getUserByName("ash");
-          user.setId(id);
-          user.setAge(1);
-          userDao.updateUser(user);
-          userDao.deleteUserById(id);
+          if (id > 0) {
+            user.setId(id);
+            user.setAge(1);
+            if (RandomUtils.nextBoolean()) { // 1/2概率执行
+              userDao.updateUser(user);
+            }
+            userDao.deleteUserById(id);
+          }
         } catch (Exception e) {
           e.printStackTrace();
         }
