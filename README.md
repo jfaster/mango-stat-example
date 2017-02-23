@@ -8,4 +8,4 @@
  * ``git clone https://github.com/jfaster/mango-stat-example.git``
  * ``cd mango-stat-example``
  * ``mvn clean jetty:run``
- * 浏览器访问：``http://localhost:8080/mango-stat``
+ * 浏览器访问：``localhost:8080/mango-stat``
